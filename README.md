@@ -34,12 +34,8 @@ with the tool's defaults.
   default: 2 (seconds)
 * **DELAY**: how long between successful reads before looping
   default: 60 (seconds)
-* **LOCATION**: alphanumeric descriptor of the location of sensor
-  default: home
-* **ROOM**: alphanumeric description of the room for the sensor
+* **TOPIC**: the MQTT topic where data should be published
   default: test
-* **SENSOR**: alphanumeric description of the sensor
-
 ## Setup
 
 The tool is a simple Python script.  Included in this repository
@@ -108,3 +104,31 @@ provides an
 that works very well.  Moreover, Home Assistant provides
 [documentation for integrating with Mosquitto](https://www.home-assistant.io/integrations/mqtt)
 .
+
+### Configuring Home Assistant
+
+The Home Assistant
+[documentation for MQTT Sensors](https://www.home-assistant.io/integrations/sensor.mqtt/#temperature-and-humidity-sensors)
+provides a good treatment of the topic; for your convenience,
+here's some sample configuration:
+
+```YAML
+mqtt:
+  sensor:
+    - name: "Temperature"
+      state_topic: "office/sensor1"
+      suggested_display_precision: 1
+      unit_of_measurement: "°F"
+      value_template: "{{ value_json.temperature_f }}
+      unique_id: "office/sensor1/temperature_f"
+      name: "Office Temperature"
+      icon: "mdi:thermometer"
+
+    - name: "Humidity"
+      state_topic: "office/sensor1"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.humidity }}"
+      unique_id: "office/sensor1/humidity"
+      name: "Office Humidity"
+      icon: "mdi:water-percent"
+```

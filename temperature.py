@@ -34,9 +34,7 @@ MQTT_TIMEOUT = int(os.getenv("MQTT_TIMEOUT", "60"))
 READ_TIMEOUT = float(os.getenv("READ_TIMEOUT", "2.0"))
 DELAY = int(os.getenv("DELAY", "3"))
 
-LOCATION = os.getenv("LOCATION", "home")
-ROOM = os.getenv("ROOM", "test")
-SENSOR = os.getenv("SENSOR", "one")
+TOPIC = os.getenv("topic", "test")
 
 mqtt_client = paho.Client()
 
@@ -49,9 +47,13 @@ while True:
         humidity, temperature_c = Adafruit_DHT.read_retry(11, PIN)
         temperature_f = temperature_c * (9 / 5) + 32
 
-        readings = {'humidity': humidity, 'temperature_f': temperature_f, 'temperature_c': temperature_c}
+        readings = {
+            "humidity": round(humidity, 2),
+            "temperature_f": round(temperature_f, 2),
+            "temperature_c": round(temperature_c, 2),
+        }
 
-        mqtt_client.publish(f"{LOCATION}/{ROOM}/{SENSOR}", json.dumps(readings))
+        mqtt_client.publish(f"{TOPIC}", json.dumps(readings))
 
     except RuntimeError as error:
         # Errors happen fairly often, DHT's are hard to read, just keep going
