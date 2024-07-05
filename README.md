@@ -36,6 +36,10 @@ with the tool's defaults.
   default: 60 (seconds)
 * **TOPIC**: the MQTT topic where data should be published
   default: test
+* **LOG_LEVEL**: logging verbosity (lower is more verbose)
+  DEBUG=10, INFO=20, WARNING=30, ERROR=40, CRITICAL=50
+  default: 20
+
 ## Setup
 
 The tool is a simple Python script.  Included in this repository

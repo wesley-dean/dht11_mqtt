@@ -8,11 +8,8 @@ This is designed to run on a Raspberry Pi (any version) and poll DHT11
 temperature / humidity sensor that's attached, by default, to pin 4.
 If you're looking down on a Raspberry Pi, pin 4 is the top-right
 pin (so, furthest from the Ethernet port).  The results are then published
-to an MQTT broker.  The topic is formulated from the location, the room,
-and the type of reading (temperature_f, temperature_c, humidity) separated
-by forward slashes.  So, if the "location" is "home" (the default) and
-the room is "test" (again, the default), then the humidity will be
-published to `home/test/humidity`.
+to an MQTT broker as a JSON dict with keys of 'temperature_c',
+'temperature_f', and 'humidity'.
 """
 
 import json
@@ -33,8 +30,10 @@ MQTT_PORT = int(os.getenv("MQTT_PORT", "1883"))
 MQTT_TIMEOUT = int(os.getenv("MQTT_TIMEOUT", "60"))
 READ_TIMEOUT = float(os.getenv("READ_TIMEOUT", "2.0"))
 DELAY = int(os.getenv("DELAY", "3"))
+TOPIC = os.getenv("TOPIC", "test")
+LOG_LEVEL = int(os.getenv("LOG_LEVEL", "20"))
 
-TOPIC = os.getenv("topic", "test")
+logging.basicConfig(level=LOG_LEVEL)
 
 mqtt_client = paho.Client()
 
@@ -53,7 +52,11 @@ while True:
             "temperature_c": round(temperature_c, 2),
         }
 
-        mqtt_client.publish(f"{TOPIC}", json.dumps(readings))
+        readings_json = json.dumps(readings)
+
+        logging.debug("Publishing '%s' to '%s'", readings_json, TOPIC)
+
+        mqtt_client.publish(TOPIC, readings_json)
 
     except RuntimeError as error:
         # Errors happen fairly often, DHT's are hard to read, just keep going
