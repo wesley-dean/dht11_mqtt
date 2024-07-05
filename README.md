@@ -3,7 +3,7 @@
 This tool is designed to run from a Raspberry Pi with a DHT11
 temperature / humidity sensor attached to pin 4 (top-right pin,
 furthest from the Ethernet port) and publish the results to
-an MQTT broker.
+an MQTT broker as a JSON object.
 
 For a good walkthrough about the wiring of the sensor, how to
 interact with the sensor using C, check out
@@ -28,7 +28,7 @@ with the tool's defaults.
   default: 127.0.0.1 (localhost)
 * **MQTT_PORT**: the port on the MQTT broker listening for traffic
   default: 1883 (unencrypted)
-* **MQTT_TIMEOUT**: MQTT broker connection timeout before failing
+* **MQTT_TIMEOUT**: MQTT broker connection timeout before pinging the broker
   default: 60 (seconds)
 * **READ_TIMEOUT**: in the event of a read error, how long to wait efore retry
   default: 2 (seconds)
@@ -38,6 +38,7 @@ with the tool's defaults.
   default: home
 * **ROOM**: alphanumeric description of the room for the sensor
   default: test
+* **SENSOR**: alphanumeric description of the sensor
 
 ## Setup
 
@@ -100,7 +101,7 @@ So, this project was an MQTT-based refactor that allowed
 Home Assistant to subscribe to topics populated with data
 published by this tool.
 
-The MQTT broker used when developing this tool was 
+The MQTT broker used when developing this tool was
 [Eclipse Mosquitto](https://mosquitto.org/).  Home Assistant
 provides an
 [MQTT Broker add-on](https://github.com/home-assistant/hassio-addons/blob/master/mosquitto/DOCS.md)

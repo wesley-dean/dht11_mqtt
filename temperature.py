@@ -14,6 +14,8 @@ by forward slashes.  So, if the "location" is "home" (the default) and
 the room is "test" (again, the default), then the humidity will be
 published to `home/test/humidity`.
 """
+
+import json
 import logging
 import os
 import sys
@@ -34,6 +36,7 @@ DELAY = int(os.getenv("DELAY", "3"))
 
 LOCATION = os.getenv("LOCATION", "home")
 ROOM = os.getenv("ROOM", "test")
+SENSOR = os.getenv("SENSOR", "one")
 
 mqtt_client = paho.Client()
 
@@ -46,9 +49,9 @@ while True:
         humidity, temperature_c = Adafruit_DHT.read_retry(11, PIN)
         temperature_f = temperature_c * (9 / 5) + 32
 
-        mqtt_client.publish(f"{LOCATION}/{ROOM}/temperature_f", temperature_f)
-        mqtt_client.publish(f"{LOCATION}/{ROOM}/temperature_c", temperature_c)
-        mqtt_client.publish(f"{LOCATION}/{ROOM}/humidity", humidity)
+        readings = {'humidity': humidity, 'temperature_f': temperature_f, 'temperature_c': temperature_c}
+
+        mqtt_client.publish(f"{LOCATION}/{ROOM}/{SENSOR}", json.dumps(readings))
 
     except RuntimeError as error:
         # Errors happen fairly often, DHT's are hard to read, just keep going
