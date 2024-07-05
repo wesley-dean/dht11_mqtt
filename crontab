@@ -1,1 +1,1 @@
-@reboot while true ; do "${HOME}/src/temperature.py" ; sleep 5 ; done
+@reboot while true ; do "${HOME}/dht11_mqtt/temperature.py" ; sleep 5 ; done

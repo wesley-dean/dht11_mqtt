@@ -78,7 +78,7 @@ A hackish, "just make it go" way of having the tool start
 at boot at just run in the background is:
 
 ```crontab
-@reboot while true ; do "${HOME}dht11_mqtt/temperature.py" ; sleep 5 ; done
+@reboot while true ; do "${HOME}/dht11_mqtt/temperature.py" ; sleep 5 ; done
 ```
 
 Add that line to your crontab (`crontab -e`), reboot, and you're
