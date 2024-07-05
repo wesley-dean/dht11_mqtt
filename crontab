@@ -1,0 +1,1 @@
+@reboot while true ; do "${HOME}/src/temperature.py" ; sleep 5 ; done
