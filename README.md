@@ -39,6 +39,7 @@ with the tool's defaults.
 * **LOG_LEVEL**: logging verbosity (lower is more verbose)
   DEBUG=10, INFO=20, WARNING=30, ERROR=40, CRITICAL=50
   default: 20
+* **LOOPS**: how many times to loop before quitting; <= 0 for no limit
 
 ## Setup
 
